@@ -17,6 +17,26 @@ TidyTime <- tidytuesday_tweets %>%
   mutate(Time = Hour + Minute/60) %>% 
   select(Weekday, Time) 
 
+tidytuesday_tweets %>% 
+  filter(!str_detect(.$screen_name,c("R4DScommunity","thomas_mock"))) %>% 
+  select(created_at) %>%
+  mutate_at("created_at",ymd_hms) %>% 
+  mutate(Weekday = wday(.$created_at)) %>% 
+  mutate(Hour = hour(.$created_at)) %>% 
+  mutate(Minute = round(minute(.$created_at)/10,0)*10) %>% 
+  mutate(Time = Hour + Minute/60) %>%
+  mutate(Cont_Time = (Weekday - 1) * 24 + Time) %>% 
+  select(Cont_Time) %>% 
+  ggplot(aes(x = Cont_Time)) +
+  stat_density(aes(fill = stat(count)), geom = "raster", 
+               position = "identity") +
+  labs(title = "When users posts on #TidyTuesday",
+       x = "Weekday",
+       fill = "Number of posts") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  scale_fill_jcolors_contin(palette = "pal3")
+
 TidyTime %>% 
   ggplot(aes(x = Time)) +
   geom_density(aes(colour = Weekday)) +
