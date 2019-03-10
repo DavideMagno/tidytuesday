@@ -21,8 +21,8 @@ energy_spending %>%
        x = "Year",
        y = "% of total spending") +
   theme(plot.subtitle = element_text(size = 8)) +
-  theme(legend.title = element_text(size = 8)) +
-  theme(legend.text = element_text(size = 8)) +
+  theme(legend.title = element_text(size = 6)) +
+  theme(legend.text = element_text(size = 6)) +
   scale_y_continuous(labels = scales::percent)
 
 ggsave("Spending_Energy.pdf")
